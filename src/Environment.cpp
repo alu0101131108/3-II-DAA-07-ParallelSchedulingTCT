@@ -49,6 +49,11 @@ void Environment::loadProblemFromFile(std::string filename)
 {
   try 
   {
+    // Clear task and machine vectors.
+    tasks_.clear();
+    machines_.clear();
+
+    // Variable declaration.
     int taskNumber, machineNumber, tempTime;
     std::string line;
     std::istringstream iss;
@@ -59,6 +64,7 @@ void Environment::loadProblemFromFile(std::string filename)
     for (int i = 0; i < 2; i++) 
     {
       getline(ifs, line);
+      line.erase(0, 2);
       iss.str(line);
       iss >> (i == 0 ? taskNumber : machineNumber);
       if (!iss) throw 20;
@@ -67,6 +73,7 @@ void Environment::loadProblemFromFile(std::string filename)
 
     // Read process times and create corresponding tasks. 
     getline(ifs, line);
+    line.erase(0, line.find('\t'));
     iss.str(line);
     for (int i = 0; i < taskNumber; i++)
     {
@@ -76,6 +83,7 @@ void Environment::loadProblemFromFile(std::string filename)
     iss.clear();
 
     // Read setup times and fill table.
+    getline(ifs, line);
     setupTimes_ = Table(taskNumber + 1, taskNumber + 1, 0);
     for (int i = 0; i < taskNumber + 1; i++)
     {

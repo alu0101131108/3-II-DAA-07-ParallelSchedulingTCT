@@ -3,7 +3,7 @@
 
 int main() {
   Environment env;
-  env.loadProblemFromFile("./../input-problems/test.in");
+  env.loadProblemFromFile("./../input-problems/I40j_2m_S1_1.txt");
   env.setScheduler(new ConstructiveGreedy());
   env.runScheduler();
   env.printTasks();
