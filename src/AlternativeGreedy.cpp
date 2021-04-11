@@ -1,4 +1,4 @@
-#include "./../include/AlternativeGreedy.hpp"
+#include "./../include/ScheduleAlgorithms/AlternativeGreedy.hpp"
 
 void AlternativeGreedy::run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct)
 {

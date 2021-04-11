@@ -3,7 +3,7 @@
 #include "Task.hpp"
 #include "Table.hpp"
 #include "Machine.hpp"
-#include "ScheduleAlgorithm.hpp"
+#include "./ScheduleAlgorithms/ScheduleAlgorithm.hpp"
 #include <vector>
 #include <string>
 #include <fstream>

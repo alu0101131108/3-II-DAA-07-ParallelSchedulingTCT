@@ -1,6 +1,6 @@
 #include "./../include/Environment.hpp"
-#include "./../include/ConstructiveGreedy.hpp"
-#include "./../include/AlternativeGreedy.hpp"
+#include "./../include/ScheduleAlgorithms/ConstructiveGreedy.hpp"
+#include "./../include/ScheduleAlgorithms/AlternativeGreedy.hpp"
 
 int main() {
   Environment env;
