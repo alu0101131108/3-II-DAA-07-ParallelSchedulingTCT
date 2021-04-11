@@ -1,6 +1,6 @@
 #include "./../include/ConstructiveGreedy.hpp"
 
-void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes) 
+void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct)
 {
   int nTasks = tasks.size();
   int nMachines = machines.size();
@@ -36,6 +36,7 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
     minTCtInc = UPPER_TIME_LIMIT;
     for (int m = 0; m < nMachines; m++)
     {
+      //lastTask = schedules[m].size() == 0 ? 0 : schedules[m][schedules[m].size() - 1].getId();
       lastTask = schedules[m][schedules[m].size() - 1].getId();
       minCtInc = UPPER_TIME_LIMIT;
       for (int j = 1; j < nTasks; j++)
@@ -65,6 +66,7 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
   {
     machines[m].setSchedule(schedules[m]);
   }
+  tct = totalCt;
 }
 
 // n: 5

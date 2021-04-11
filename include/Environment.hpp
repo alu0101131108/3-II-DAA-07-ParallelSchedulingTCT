@@ -18,6 +18,7 @@ private:
   std::vector<Machine> machines_;
   Table setupTimes_;
   ScheduleAlgorithm *scheduler_;
+  int tct_;
 
 public:
   Environment();
@@ -25,6 +26,7 @@ public:
   std::vector<Task> const& getTasks() const;
   std::vector<Machine> const& getMachines() const;
   Table const& getSetupTimes() const;
+  int const getTct() const;
   void setTasks(std::vector<Task> newTaskList);
   void setMachines(std::vector<Machine> newMachineList);
   void setSetupTimes(Table newSetupTimes);

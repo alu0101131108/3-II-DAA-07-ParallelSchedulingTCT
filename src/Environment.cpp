@@ -1,9 +1,9 @@
 #include "./../include/Environment.hpp"
 
-Environment::Environment() : scheduler_(NULL) 
+Environment::Environment() : scheduler_(NULL), tct_(0) 
 {}
 
-Environment::~Environment() 
+Environment::~Environment()
 {}
 
 std::vector<Task> const& Environment::getTasks() const
@@ -19,6 +19,11 @@ std::vector<Machine> const& Environment::getMachines() const
 Table const& Environment::getSetupTimes() const
 {
   return setupTimes_;
+}
+
+int const Environment::getTct() const
+{
+  return tct_;
 }
 
 void Environment::setTasks(std::vector<Task> newTaskList) 
@@ -131,7 +136,7 @@ void Environment::loadProblemFromFile(std::string filename)
 
 void Environment::runScheduler() 
 {
-  scheduler_ -> run(tasks_, machines_, setupTimes_);
+  scheduler_ -> run(tasks_, machines_, setupTimes_, tct_);
 }
 
 void Environment::printTasks() 

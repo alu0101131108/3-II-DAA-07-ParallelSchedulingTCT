@@ -8,5 +8,6 @@ int main() {
   env.setScheduler(new ConstructiveGreedy());
   env.runScheduler();
   env.printMachineSchedules();
+  std::cout << "TCT: " << env.getTct() << std::endl;
   return 0;
 }

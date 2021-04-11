@@ -6,7 +6,7 @@
 class ScheduleAlgorithm
 {
 public:
-  virtual void run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes) = 0;
+  virtual void run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct) = 0;
 };
 
 #endif // __SCHEDULEALGORITHM_H__
