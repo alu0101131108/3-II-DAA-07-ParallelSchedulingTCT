@@ -30,4 +30,4 @@
 *.exe
 *.out
 *.app
-build/main
+./build/main
