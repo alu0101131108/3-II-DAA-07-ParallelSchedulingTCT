@@ -13,6 +13,7 @@ public:
   std::vector<Task> const& getSchedule() const;
   void setSchedule(std::vector<Task> newSchedule);
   void addToSchedule(const Task newTask);
+  void clearSchedule();
 };
 
 #endif // __MACHINE_H__

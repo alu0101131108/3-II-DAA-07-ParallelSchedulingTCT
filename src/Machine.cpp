@@ -21,4 +21,9 @@ void Machine::addToSchedule(const Task newTask)
   schedule_.push_back(newTask);
 }
 
+void Machine::clearSchedule()
+{
+  schedule_.clear();
+}
+
 

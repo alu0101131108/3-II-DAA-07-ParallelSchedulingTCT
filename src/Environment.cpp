@@ -57,6 +57,7 @@ void Environment::loadProblemFromFile(std::string filename)
     // Clear task and machine vectors.
     tasks_.clear();
     machines_.clear();
+    tct_ = 0;
 
     // Variable declaration.
     int taskNumber, machineNumber, tempTime;
@@ -136,6 +137,10 @@ void Environment::loadProblemFromFile(std::string filename)
 
 void Environment::runScheduler() 
 {
+  for (int m = 0; m < machines_.size(); m++)
+  {
+    machines_[m].clearSchedule();
+  }
   scheduler_ -> run(tasks_, machines_, setupTimes_, tct_);
 }
 
