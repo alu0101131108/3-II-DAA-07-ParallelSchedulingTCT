@@ -1,19 +1,23 @@
 #include "./../include/Environment.hpp"
 #include "./../include/ScheduleAlgorithms/ConstructiveGreedy.hpp"
 #include "./../include/ScheduleAlgorithms/AlternativeGreedy.hpp"
+#include <vector>
+#include <string>
 
 int main() {
-  Environment env;
-  
-  env.loadProblemFromFile("./../input-problems/I40j_8m_S1_1.txt");
-  env.setScheduler(new ConstructiveGreedy());
-  env.runScheduler();
-  std::cout << "Constructive-TCT: " << env.getTct() << std::endl;
+  Environment framework;
 
-  env.loadProblemFromFile("./../input-problems/I40j_8m_S1_1.txt");
-  env.setScheduler(new AlternativeGreedy());
-  env.runScheduler();
-  std::cout << "Alternative-TCT: " << env.getTct() << std::endl;
+  for (int i = 2; i <= 8; i = i +2)
+  {
+    std::cout << "Tasks: 40, Machines: " << i << "S1_1." << std::endl; 
+    framework.loadProblemFromFile("./../input-problems/I40j_" + std::to_string(i) + "m_S1_1.txt");
+    framework.setScheduler(new ConstructiveGreedy());
+    framework.runScheduler();
+    std::cout << "Constructive-TCT: " << framework.getTct() << std::endl;
+    framework.setScheduler(new AlternativeGreedy());
+    framework.runScheduler();
+    std::cout << "Alternative-TCT: " << framework.getTct() << std::endl;
+  }
 
   return 0;
 }
