@@ -1,7 +1,8 @@
 #ifndef __CONSTRUCTIVEGREEDY_H__
 #define __CONSTRUCTIVEGREEDY_H__
 #include "ScheduleAlgorithm.hpp"
-#include <iostream>
+#include <vector>
+#include <algorithm>
 
 class ConstructiveGreedy : public ScheduleAlgorithm
 {

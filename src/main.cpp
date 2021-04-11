@@ -3,10 +3,10 @@
 
 int main() {
   Environment env;
-  env.loadProblemFromFile("./../input-problems/I40j_2m_S1_1.txt");
+  env.loadProblemFromFile("./../input-problems/I40j_8m_S1_1.txt");
+  env.printTasks();
   env.setScheduler(new ConstructiveGreedy());
   env.runScheduler();
-  env.printTasks();
   env.printMachineSchedules();
   return 0;
 }

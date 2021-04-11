@@ -71,6 +71,12 @@ void Environment::loadProblemFromFile(std::string filename)
       iss.clear();
     }
 
+    // Create machines.
+    for (int i = 0; i < machineNumber; i++)
+    {
+      machines_.push_back(Machine());
+    }
+
     // Read process times and create corresponding tasks. 
     getline(ifs, line);
     line.erase(0, line.find('\t'));
@@ -143,7 +149,7 @@ void Environment::printMachineSchedules()
   std::vector<Task> schedules;
   for (int i = 0; i < machines_.size(); i++)
   {
-    std::cout << "M" + i << "'s Schedule:" << std::endl;
+    std::cout << "M" << i << "'s Schedule:" << std::endl;
     schedules = machines_[i].getSchedule();
     for (int j = 0; j < schedules.size(); j++)
     {
