@@ -9,7 +9,7 @@ int main() {
 
   for (int i = 2; i <= 8; i = i +2)
   {
-    std::cout << "Tasks: 40, Machines: " << i << "S1_1." << std::endl; 
+    std::cout << "Tasks: 40, Machines: " << i << ", S1_1." << std::endl; 
     framework.loadProblemFromFile("./../input-problems/I40j_" + std::to_string(i) + "m_S1_1.txt");
     framework.setScheduler(new ConstructiveGreedy());
     framework.runScheduler();

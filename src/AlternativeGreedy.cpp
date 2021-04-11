@@ -18,7 +18,7 @@ void AlternativeGreedy::run(const std::vector<Task> &tasks, std::vector<Machine>
     {
       lastTask = schedules[m].size() == 0 ? 0 : schedules[m][schedules[m].size() - 1].getId();
       minCtInc = UPPER_TIME_LIMIT;
-      for (int j = 1; j < nTasks; j++)
+      for (int j = 1; j <= nTasks; j++)
       {
         // Check only tasks that are not scheduled yet.
         if (std::find(scheduledIndexes.begin(), scheduledIndexes.end(), j) == scheduledIndexes.end() &&
