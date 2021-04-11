@@ -68,14 +68,3 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
   }
   tct = totalCt;
 }
-
-// n: 5
-// m: 4
-// Pi: 10 23 71 11 14
-// Sij:
-// 0 2 3 8 5 6
-// 8 0 5 8 9 9
-// 9 7 0 8 3 7
-// 7 5 8 0 3 2
-// 1 1 2 4 0 8
-// 4 7 9 0 1 0
