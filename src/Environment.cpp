@@ -149,9 +149,9 @@ void Environment::printTasks()
   std::cout << "Task's process times" << std::endl;
   for (int i = 0; i < tasks_.size(); i++) 
   {
+    if ((i + 1) % 6 == 0) std::cout << std::endl;
     tasks_[i].print();
     std::cout << " ";
-    if ((i + 1) % 5 == 0) std::cout << std::endl;
   }
   std::cout << std::endl;
 }
@@ -161,12 +161,12 @@ void Environment::printMachineSchedules()
   std::vector<Task> schedules;
   for (int m = 0; m < machines_.size(); m++)
   {
-    std::cout << "M" << m << "'s Schedule:" << std::endl;
+    std::cout << "M" << m + 1 << "'s Schedule:" << std::endl;
     schedules = machines_[m].getSchedule();
     for (int t = 0; t < schedules.size(); t++)
     {
+      if ((t + 1) % 11 == 0) std::cout << std::endl;
       std::cout << "[T" << schedules[t].getId() << "] ";
-      if ((t + 1) % 5 == 0) std::cout << std::endl;
     }
     std::cout << std::endl;
   }

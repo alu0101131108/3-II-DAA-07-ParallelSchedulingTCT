@@ -9,14 +9,16 @@ int main() {
 
   for (int i = 2; i <= 8; i = i +2)
   {
-    std::cout << "Tasks: 40, Machines: " << i << ", S1_1." << std::endl; 
+    std::cout << "\n\n==========Tasks: 40, Machines: " << i << ", S1_1.==========" << std::endl;
     framework.loadProblemFromFile("./../input-problems/I40j_" + std::to_string(i) + "m_S1_1.txt");
     framework.setScheduler(new ConstructiveGreedy());
     framework.runScheduler();
-    std::cout << "Constructive-TCT: " << framework.getTct() << std::endl;
+    std::cout << "\n----------Constructive-TCT: " << framework.getTct() << "----------" << std::endl;
+    // framework.printMachineSchedules();
     framework.setScheduler(new AlternativeGreedy());
     framework.runScheduler();
-    std::cout << "Alternative-TCT: " << framework.getTct() << std::endl;
+    std::cout << "\n----------Alternative-TCT: " << framework.getTct() << "----------" << std::endl;
+    // framework.printMachineSchedules();
   }
 
   return 0;
