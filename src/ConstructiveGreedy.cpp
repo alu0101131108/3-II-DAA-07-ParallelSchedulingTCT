@@ -4,30 +4,40 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
 {
   int nTasks = tasks.size();
   int nMachines = machines.size();
-  std::vector<int> scheduledTasks;
-  
+  std::vector<std::vector<Task>> schedules(nMachines, std::vector<Task>());
+  std::vector<int> machineTCT(nMachines, 0);
+  std::vector<int> scheduledIndexes;
+
   // Add one initial task for every machine.
-  int minProcessTime, minPtIndex;
+  int minCompletionTime, minCtIndex;
   for (int m = 0; m < nMachines; m++)
   {
-    minProcessTime = UPPER_PT_LIMIT;
-    minPtIndex = -1;
+    minCompletionTime = UPPER_TIME_LIMIT;
+    minCtIndex = -1;
     for (int j = 1; j < nTasks; j++)
     {
       // Check only tasks that are not scheduled yet.
-      if (std::find(scheduledTasks.begin(), scheduledTasks.end(), j) == scheduledTasks.end() &&
-          setupTimes.get(0, j) < minProcessTime)
+      if (std::find(scheduledIndexes.begin(), scheduledIndexes.end(), j) == scheduledIndexes.end() &&
+          (setupTimes.get(0, j) + tasks[j - 1].getProcessTime()) < minCompletionTime)
       {
-        minProcessTime = setupTimes.get(0, j);
-        minPtIndex = j;
+        minCompletionTime = setupTimes.get(0, j) + tasks[j - 1].getProcessTime();
+        minCtIndex = j;
       }
     }
-    machines[m].addToSchedule(tasks[minPtIndex - 1]);
-    scheduledTasks.push_back(minPtIndex);
+    schedules[m].push_back(tasks[minCtIndex - 1]);
+    machineTCT[m] = setupTimes.get(0, minCtIndex) + tasks[minCtIndex - 1].getProcessTime();
+    scheduledIndexes.push_back(minCtIndex);
   }
 
   // Add tasks that minimize TCT to each machine.
   
+
+  // Set schedules to corresponding machines.
+  for (int m = 0; m < nMachines; m++)
+  {
+    machines[m].setSchedule(schedules[m]);
+    std::cout << "TCT: " << machineTCT[m] << std::endl;
+  }
 }
 
 // n: 5

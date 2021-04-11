@@ -1,7 +1,7 @@
 #ifndef __TASK_H__
 #define __TASK_H__
 
-const int UPPER_PT_LIMIT = 10000;
+const int UPPER_TIME_LIMIT = 10000;
 
 class Task
 {
