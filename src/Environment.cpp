@@ -84,7 +84,7 @@ void Environment::loadProblemFromFile(std::string filename)
     for (int i = 0; i < taskNumber; i++)
     {
       if (!(iss >> tempTime)) throw 30;
-      tasks_.push_back(Task(tempTime));
+      tasks_.push_back(Task(i + 1, tempTime));
     }
     iss.clear();
 
@@ -139,7 +139,9 @@ void Environment::printTasks()
   std::cout << "Task's process times" << std::endl;
   for (int i = 0; i < tasks_.size(); i++) 
   {
-    std::cout << "[" << tasks_[i].getProcessTime() << "] ";
+    tasks_[i].print();
+    std::cout << " ";
+    if ((i + 1) % 5 == 0) std::cout << std::endl;
   }
   std::cout << std::endl;
 }
@@ -147,13 +149,14 @@ void Environment::printTasks()
 void Environment::printMachineSchedules()
 {
   std::vector<Task> schedules;
-  for (int i = 0; i < machines_.size(); i++)
+  for (int m = 0; m < machines_.size(); m++)
   {
-    std::cout << "M" << i << "'s Schedule:" << std::endl;
-    schedules = machines_[i].getSchedule();
-    for (int j = 0; j < schedules.size(); j++)
+    std::cout << "M" << m << "'s Schedule:" << std::endl;
+    schedules = machines_[m].getSchedule();
+    for (int t = 0; t < schedules.size(); t++)
     {
-      std::cout << "[" << schedules[j].getProcessTime() << "] ";
+      std::cout << "[T" << schedules[t].getId() << "] ";
+      if ((t + 1) % 5 == 0) std::cout << std::endl;
     }
     std::cout << std::endl;
   }
