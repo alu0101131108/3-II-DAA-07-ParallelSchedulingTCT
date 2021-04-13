@@ -38,14 +38,28 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
     glMinTctInc = UPPER_TIME_LIMIT;
     for (int m = 0; m < nMachines; m++)
     {
-      //lastTask = schedules[m].size() == 0 ? 0 : schedules[m][schedules[m].size() - 1].getId();
       lastTask = schedules[m][schedules[m].size() - 1].getId();
       minTctInc = UPPER_TIME_LIMIT;
 
       // Look for the best task to insert in the machine m.
       for (int j = 1; j <= nTasks; j++)
       {
-        tempTctInc = setupTimes.get(lastTask, j) + tasks[j - 1].getProcessTime();
+        // Calculate tct to node j.
+        nodeTct = 0;
+        for (int st = 0; st < schedules[m].size(); st++)
+        {
+          // Sumattory of each process + setup time in scheduled tasks.
+          if (st == 0)
+          {
+            nodeTct += setupTimes.get(0, schedules[m][st].getId()) + schedules[m][st].getProcessTime();
+          }
+          else 
+          {
+            nodeTct += setupTimes.get(schedules[m][st - 1].getId(), schedules[m][st].getId()) + schedules[m][st].getProcessTime();
+          }
+        }
+        nodeTct += setupTimes.get(lastTask, j) + tasks[j - 1].getProcessTime();
+        tempTctInc = nodeTct;
         // Check only tasks that are not scheduled yet.
         if (std::find(scheduledIndexes.begin(), scheduledIndexes.end(), j) == scheduledIndexes.end() &&
             tempTctInc < minTctInc)
