@@ -14,11 +14,11 @@ int main() {
     framework.setScheduler(new ConstructiveGreedy());
     framework.runScheduler();
     std::cout << "\n----------Constructive-TCT: " << framework.getTct() << "----------" << std::endl;
-    // framework.printMachineSchedules();
+    framework.printMachineSchedules();
     framework.setScheduler(new AlternativeGreedy());
     framework.runScheduler();
     std::cout << "\n----------Alternative-TCT: " << framework.getTct() << "----------" << std::endl;
-    // framework.printMachineSchedules();
+    framework.printMachineSchedules();
   }
 
   return 0;

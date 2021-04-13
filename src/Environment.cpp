@@ -144,7 +144,7 @@ void Environment::runScheduler()
   scheduler_ -> run(tasks_, machines_, setupTimes_, tct_);
 }
 
-void Environment::printTasks() 
+void Environment::printTasks() const 
 {
   std::cout << "Task's process times" << std::endl;
   for (int i = 0; i < tasks_.size(); i++) 
@@ -156,7 +156,7 @@ void Environment::printTasks()
   std::cout << std::endl;
 }
 
-void Environment::printMachineSchedules()
+void Environment::printMachineSchedules() const
 {
   std::vector<Task> schedules;
   for (int m = 0; m < machines_.size(); m++)

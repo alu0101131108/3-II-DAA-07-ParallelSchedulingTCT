@@ -33,8 +33,8 @@ public:
   void setScheduler(ScheduleAlgorithm *scheduleStrategy);
   void loadProblemFromFile(std::string filename);
   void runScheduler();
-  void printTasks();
-  void printMachineSchedules();
+  void printTasks() const;
+  void printMachineSchedules() const;
 };
 
 #endif // __SCHEDULER_H__
