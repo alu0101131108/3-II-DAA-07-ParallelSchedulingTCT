@@ -2,7 +2,7 @@
 #define __TASK_H__
 #include <iostream>
 
-const int UPPER_TIME_LIMIT = 10000;
+const int UPPER_TIME_LIMIT = 99999999;
 
 class Task
 {

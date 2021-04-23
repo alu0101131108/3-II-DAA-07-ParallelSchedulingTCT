@@ -1,6 +1,7 @@
 #include "./../include/Environment.hpp"
 #include "./../include/ScheduleAlgorithms/ConstructiveGreedy.hpp"
 #include "./../include/ScheduleAlgorithms/AlternativeGreedy.hpp"
+#include "./../include/ScheduleAlgorithms/Grasp.hpp"
 #include <vector>
 #include <string>
 
@@ -13,11 +14,11 @@ int main() {
     framework.loadProblemFromFile("./../input-problems/I40j_" + std::to_string(i) + "m_S1_1.txt");
     framework.setScheduler(new ConstructiveGreedy());
     framework.runScheduler();
-    std::cout << "\n----------Constructive-TCT: " << framework.getTct() << "----------" << std::endl;
+    std::cout << "\n----------Constructive-TCT: " << framework.getTctSum() << "----------" << std::endl;
     // framework.printMachineSchedules();
     framework.setScheduler(new AlternativeGreedy());
     framework.runScheduler();
-    std::cout << "\n----------Alternative-TCT: " << framework.getTct() << "----------" << std::endl;
+    std::cout << "\n----------Alternative-TCT: " << framework.getTctSum() << "----------" << std::endl;
     // framework.printMachineSchedules();
   }
 

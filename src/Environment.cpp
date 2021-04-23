@@ -1,29 +1,29 @@
 #include "./../include/Environment.hpp"
 
-Environment::Environment() : scheduler_(NULL), tct_(0) 
+Environment::Environment() : scheduler_(NULL), tctSum_(0) 
 {}
 
 Environment::~Environment()
 {}
 
-std::vector<Task> const& Environment::getTasks() const
+const std::vector<Task>& Environment::getTasks() const
 {
   return tasks_;
 }
 
-std::vector<Machine> const& Environment::getMachines() const
+const std::vector<Machine>& Environment::getMachines() const
 {
   return machines_;
 }
 
-Table const& Environment::getSetupTimes() const
+const Table& Environment::getSetupTimes() const
 {
   return setupTimes_;
 }
 
-int const Environment::getTct() const
+const int Environment::getTctSum() const
 {
-  return tct_;
+  return tctSum_;
 }
 
 void Environment::setTasks(std::vector<Task> newTaskList) 
@@ -50,6 +50,11 @@ void Environment::setScheduler(ScheduleAlgorithm *scheduleStrategy)
   scheduler_ = scheduleStrategy;
 }
 
+void Environment::setTctSum(int newTctSum) 
+{
+  tctSum_ = newTctSum;
+}
+
 void Environment::loadProblemFromFile(std::string filename) 
 {
   try 
@@ -57,7 +62,7 @@ void Environment::loadProblemFromFile(std::string filename)
     // Clear task and machine vectors.
     tasks_.clear();
     machines_.clear();
-    tct_ = 0;
+    tctSum_ = 0;
 
     // Variable declaration.
     int taskNumber, machineNumber, tempTime;
@@ -141,7 +146,7 @@ void Environment::runScheduler()
   {
     machines_[m].clearSchedule();
   }
-  scheduler_ -> run(tasks_, machines_, setupTimes_, tct_);
+  scheduler_ -> run(this);
 }
 
 void Environment::printTasks() const 

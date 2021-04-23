@@ -1,7 +1,11 @@
 #include "./../include/ScheduleAlgorithms/AlternativeGreedy.hpp"
 
-void AlternativeGreedy::run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct)
+void AlternativeGreedy::run(Environment *env)
 {
+  const std::vector<Task> &tasks = (env->getTasks());
+  std::vector<Machine> machines = (env->getMachines());
+  const Table &setupTimes = (env->getSetupTimes());
+
   int nTasks = tasks.size();
   int nMachines = machines.size();
   int nodeTct, glTct = 0;
@@ -52,5 +56,6 @@ void AlternativeGreedy::run(const std::vector<Task> &tasks, std::vector<Machine>
   {
     machines[m].setSchedule(schedules[m]);
   }
-  tct = glTct;
+  env->setMachines(machines);
+  env->setTctSum(glTct);
 }

@@ -11,6 +11,7 @@
 #include <string>
 #include <sstream>
 
+class ScheduleAlgorithm;
 class Environment
 {
 private:
@@ -18,19 +19,21 @@ private:
   std::vector<Machine> machines_;
   Table setupTimes_;
   ScheduleAlgorithm *scheduler_;
-  int tct_;
+  int tctSum_;
 
 public:
   Environment();
   ~Environment();
-  std::vector<Task> const& getTasks() const;
-  std::vector<Machine> const& getMachines() const;
-  Table const& getSetupTimes() const;
-  int const getTct() const;
+  const std::vector<Task>& getTasks() const;
+  const std::vector<Machine>& getMachines() const;
+  const Table& getSetupTimes() const;
+  const int getTctSum() const;
   void setTasks(std::vector<Task> newTaskList);
   void setMachines(std::vector<Machine> newMachineList);
   void setSetupTimes(Table newSetupTimes);
   void setScheduler(ScheduleAlgorithm *scheduleStrategy);
+  void setTctSum(int newTctSum);
+
   void loadProblemFromFile(std::string filename);
   void runScheduler();
   void printTasks() const;

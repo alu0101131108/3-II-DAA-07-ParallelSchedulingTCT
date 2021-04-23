@@ -6,7 +6,7 @@ Machine::Machine()
 Machine::~Machine() 
 {}
 
-std::vector<Task> const& Machine::getSchedule() const
+const std::vector<Task> &Machine::getSchedule() const
 {
   return schedule_;
 }

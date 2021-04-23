@@ -1,7 +1,11 @@
 #include "./../include/ScheduleAlgorithms/ConstructiveGreedy.hpp"
 
-void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct)
+void ConstructiveGreedy::run(Environment *env) // const std::vector<Task> &tasks, std::vector<Machine> &machines, const Table &setupTimes, int &tct
 {
+  const std::vector<Task> &tasks = (env -> getTasks());
+  std::vector<Machine> machines = (env -> getMachines());
+  const Table &setupTimes = (env -> getSetupTimes());
+
   int nTasks = tasks.size();
   int nMachines = machines.size();
   int nodeTct, glTct = 0;
@@ -94,5 +98,6 @@ void ConstructiveGreedy::run(const std::vector<Task> &tasks, std::vector<Machine
   {
     machines[m].setSchedule(schedules[m]);
   }
-  tct = glTct;
+  env -> setMachines(machines);
+  env -> setTctSum(glTct);
 }
