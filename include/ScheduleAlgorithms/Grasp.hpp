@@ -24,4 +24,5 @@ class Grasp : public ScheduleAlgorithm
     void run(Environment *env);
 };
 
+
 #endif // __GRASP_H__

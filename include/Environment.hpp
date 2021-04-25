@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <random>
+#include <time.h>
 
 class ScheduleAlgorithm;
 class Environment
