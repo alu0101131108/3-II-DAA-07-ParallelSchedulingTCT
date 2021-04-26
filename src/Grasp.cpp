@@ -25,17 +25,18 @@ void Grasp::run(Environment *env)
     }
     switch (iterationsType_)
     {
-      case 0:
+    case ALL_ITERATIONS:
+      threadIteration++;
+      break;
+
+    case NO_PROGRESS_ITERATIONS:
+      if (noProgress)
         threadIteration++;
-        break;
+      break;
 
-      case 1:
-        if (noProgress) threadIteration++;
-        break;
-
-      default:
-        std::cout << "ERROR: Unknown iterations type for Grasp.\n";
-        throw 72;
+    default:
+      std::cout << "ERROR: Unknown iterations type for Grasp.\n";
+      throw 72;
     }
   }
   env -> copy(&winnerEnv);
@@ -118,26 +119,26 @@ void Grasp::update(Environment *env)
     previous = updated;
     switch (operationType_)
     {
-      case 0:
-        interInsert(&updated);
-        break;
+    case INTER_INSERT:
+      interInsert(&updated);
+      break;
 
-      case 1:
-        intraInsert(&updated);
-        break;
+    case INTRA_INSERT:
+      intraInsert(&updated);
+      break;
 
-      case 2:
-        interSwap(&updated);
-        break;
+    case INTER_SWAP:
+      interSwap(&updated);
+      break;
 
-      case 3:
-        intraSwap(&updated);
-        break;
+    case INTRA_SWAP:
+      intraSwap(&updated);
+      break;
 
-      default:
-        std::cout << "ERROR: Unknown operation type for Grasp Algorithm." << std::endl;
-        throw 1001;
-        break;
+    default:
+      std::cout << "ERROR: Unknown operation type for Grasp Algorithm." << std::endl;
+      throw 1001;
+      break;
     }
   } while (previous.getTctSum() != updated.getTctSum());
   env -> copy(&updated);

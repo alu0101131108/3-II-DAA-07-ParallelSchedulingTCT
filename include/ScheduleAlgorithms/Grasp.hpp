@@ -4,6 +4,20 @@
 #include <vector>
 #include <algorithm>
 
+enum
+{
+  INTRA_INSERT,
+  INTRA_SWAP,
+  INTER_INSERT,
+  INTER_SWAP
+};
+
+enum
+{
+  ALL_ITERATIONS,
+  NO_PROGRESS_ITERATIONS
+};
+
 class Grasp : public ScheduleAlgorithm
 {
   private:
@@ -13,16 +27,16 @@ class Grasp : public ScheduleAlgorithm
     int iterationsType_;
     bool anxiousMode_;
 
-    void interSwap(Environment *env);
-    void intraSwap(Environment *env);
-    void interInsert(Environment *env);
-    void intraInsert(Environment *env);
     void constructive(Environment *env);
     void update(Environment *env);
     
   public:
     Grasp(int threadsNumber, int operationType, int iterationsType, int candidatesNumber, bool anxiousMode = false);
     void run(Environment *env);
+    void interSwap(Environment *env);
+    void intraSwap(Environment *env);
+    void interInsert(Environment *env);
+    void intraInsert(Environment *env);
 };
 
 
