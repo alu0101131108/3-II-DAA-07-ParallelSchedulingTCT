@@ -7,7 +7,7 @@ Cabe destacar que en mi algoritmo voraz alternativo, en vez de buscar la mejor t
 No he tenido tiempo de realizar el apartado c propuesto.
 La ejecución del programa devuelve una serie de datos en relación a los archivos de entrada de ejemplo propuestos por la profesora, mostrando el valor de la suma de los tct's de cada máquina, para cada problema. Se pueden descomentar las dos lineas correspondientes en src/main.cpp para mostrar el orden de asignacion de las tareas para cada máquina.
 
-Resultados:
+Resultados entrega 1:
 ==========Tasks: 40, Machines: 2, S1_1.==========
 
 ----------Constructive-TCT: 13664----------
@@ -34,3 +34,64 @@ Resultados:
 ----------Constructive-TCT: 4415----------
 
 ----------Alternative-TCT: 4558----------
+
+
+Resultados entrega 2:
+==========Tasks: 40, Machines: 2, S1_1.==========
+
+----------Constructive-TCT: 13664----------
+
+----------Alternative-TCT: 13739----------
+
+----------Grasp-IntraSwap-TCT: 13913----------
+
+----------Grasp-IntraInsert-TCT: 13908----------
+
+----------Grasp-InterSwap-TCT: 14070----------
+
+----------Grasp-InterInsert-TCT: 13703----------
+
+
+==========Tasks: 40, Machines: 4, S1_1.==========
+
+----------Constructive-TCT: 7459----------
+
+----------Alternative-TCT: 7572----------
+
+----------Grasp-IntraSwap-TCT: 7564----------
+
+----------Grasp-IntraInsert-TCT: 7609----------
+
+----------Grasp-InterSwap-TCT: 7336----------
+
+----------Grasp-InterInsert-TCT: 7323----------
+
+
+==========Tasks: 40, Machines: 6, S1_1.==========
+
+----------Constructive-TCT: 5377----------
+
+----------Alternative-TCT: 5552----------
+
+----------Grasp-IntraSwap-TCT: 5341----------
+
+----------Grasp-IntraInsert-TCT: 5427----------
+
+----------Grasp-InterSwap-TCT: 5228----------
+
+----------Grasp-InterInsert-TCT: 5238----------
+
+
+==========Tasks: 40, Machines: 8, S1_1.==========
+
+----------Constructive-TCT: 4415----------
+
+----------Alternative-TCT: 4558----------
+
+----------Grasp-IntraSwap-TCT: 4321----------
+
+----------Grasp-IntraInsert-TCT: 4353----------
+
+----------Grasp-InterSwap-TCT: 4236----------
+
+----------Grasp-InterInsert-TCT: 4292----------
