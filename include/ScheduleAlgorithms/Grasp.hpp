@@ -10,17 +10,18 @@ class Grasp : public ScheduleAlgorithm
     int threadsNumber_;
     int candidatesNumber_;
     int operationType_;
-    bool anxietyMode_;
+    int iterationsType_;
+    bool anxiousMode_;
 
-    Environment interSwap(Environment *env);
-    Environment intraSwap(Environment *env);
-    Environment interInsert(Environment *env);
-    Environment intraInsert(Environment *env);
+    void interSwap(Environment *env);
+    void intraSwap(Environment *env);
+    void interInsert(Environment *env);
+    void intraInsert(Environment *env);
     void constructive(Environment *env);
     void update(Environment *env);
     
   public:
-    Grasp(int threadsNumber, int operationType, int candidatesNumber, bool anxietyMode);
+    Grasp(int threadsNumber, int operationType, int iterationsType, int candidatesNumber, bool anxiousMode = false);
     void run(Environment *env);
 };
 

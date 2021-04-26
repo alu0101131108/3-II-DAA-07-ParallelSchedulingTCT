@@ -30,3 +30,9 @@ void Task::print() const
 {
   std::cout << "[T" << id_ << ", Pt: " << processTime_ << "]";
 }
+
+void Task::operator=(const Task &newTask) 
+{
+  processTime_ = newTask.getProcessTime();
+  id_ = newTask.getId();
+}

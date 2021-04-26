@@ -1,30 +1,44 @@
 #include "./../include/ScheduleAlgorithms/Grasp.hpp"
 
-Grasp::Grasp(int threadsNumber, int operationType, int candidatesNumber, bool anxietyMode) :
-    threadsNumber_(threadsNumber), operationType_(operationType), candidatesNumber_(candidatesNumber), anxietyMode_(anxietyMode) {}
+Grasp::Grasp(int threadsNumber, int operationType, int iterationsType, int candidatesNumber, bool anxiousMode) :
+    threadsNumber_(threadsNumber), operationType_(operationType), iterationsType_(iterationsType),
+    candidatesNumber_(candidatesNumber), anxiousMode_(anxiousMode)
+{}
 
-Environment Grasp::interSwap(Environment *env)
+void Grasp::run(Environment *env)
 {
+  int threadIteration = 0;
+  int tctSum, minTctSum = UPPER_TIME_LIMIT;
+  Environment winnerEnv;
+  bool noProgress;
+  while (threadIteration < threadsNumber_)
+  {
+    noProgress = true;
+    constructive(env);
+    update(env);
+    tctSum = env -> getTctSum();
+    if (tctSum < minTctSum)
+    {
+      minTctSum = tctSum;
+      winnerEnv = *env;
+      noProgress = false;
+    }
+    switch (iterationsType_)
+    {
+      case 0:
+        threadIteration++;
+        break;
 
-  return *env;
-}
+      case 1:
+        if (noProgress) threadIteration++;
+        break;
 
-Environment Grasp::intraSwap(Environment *env)
-{
-
-  return *env;
-}
-
-Environment Grasp::interInsert(Environment *env)
-{
-
-  return *env;
-}
-
-Environment Grasp::intraInsert(Environment *env)
-{
-
-  return *env;
+      default:
+        std::cout << "ERROR: Unknown iterations type for Grasp.\n";
+        throw 72;
+    }
+  }
+  env -> copy(&winnerEnv);
 }
 
 void Grasp::constructive(Environment *env)
@@ -98,10 +112,195 @@ void Grasp::constructive(Environment *env)
 
 void Grasp::update(Environment *env)
 {
+  Environment previous, updated = *env;
+  do
+  {
+    previous = updated;
+    switch (operationType_)
+    {
+      case 0:
+        interInsert(&updated);
+        break;
 
+      case 1:
+        intraInsert(&updated);
+        break;
+
+      case 2:
+        interSwap(&updated);
+        break;
+
+      case 3:
+        intraSwap(&updated);
+        break;
+
+      default:
+        std::cout << "ERROR: Unknown operation type for Grasp Algorithm." << std::endl;
+        throw 1001;
+        break;
+    }
+  } while (previous.getTctSum() != updated.getTctSum());
+  env -> copy(&updated);
 }
 
-void Grasp::run(Environment *env)
+void Grasp::interSwap(Environment *env)
 {
-  constructive(env);
+  const std::vector<Task> &tasks = (env->getTasks());
+  const std::vector<Machine> &machines = (env->getMachines());
+  bool anxiousFound = false;
+
+  Environment tempEnv, minTctEnv = *env;
+  int tempTctSum, minTctSum = env->getTctSum();
+
+  for (int l = 0; l < machines.size(); l++)
+  {
+    for (int i = 0; i < machines.size(); i++)
+    {
+      if (l != i)
+      {
+        for (int j = 0; j < machines[l].getSchedule().size(); j++)
+        {
+          for (int k = 0; k < machines[i].getSchedule().size(); k++)
+          {
+            tempEnv = *env;
+            tempEnv.swapScheduledTasks(l, j, i, k);
+            tempEnv.computeTctSummatory();
+            tempTctSum = tempEnv.getTctSum();
+            if (tempTctSum < minTctSum)
+            {
+              minTctSum = tempTctSum;
+              minTctEnv = tempEnv;
+              if (anxiousMode_) 
+              {
+                anxiousFound = true;
+                break;
+              }
+            }
+          }
+          if (anxiousFound) break;
+        }
+        if (anxiousFound) break;
+      }
+    }
+    if (anxiousFound) break;
+  }
+  env->copy(&minTctEnv);
+}
+
+void Grasp::intraSwap(Environment *env)
+{
+  const std::vector<Task> &tasks = (env->getTasks());
+  const std::vector<Machine> &machines = (env->getMachines());
+  bool anxiousFound = false;
+
+  Environment tempEnv, minTctEnv = *env;
+  int tempTctSum, minTctSum = env->getTctSum();
+
+  for (int i = 0; i < machines.size(); i++)
+  {
+    for (int j = 0; j < machines[i].getSchedule().size(); j++)
+    {
+      for (int k = 0; k < machines[i].getSchedule().size(); k++)
+      {
+        tempEnv = *env;
+        tempEnv.swapScheduledTasks(i, j, i, k);
+        tempEnv.computeTctSummatory();
+        tempTctSum = tempEnv.getTctSum();
+        if (tempTctSum < minTctSum)
+        {
+          minTctSum = tempTctSum;
+          minTctEnv = tempEnv;
+          if (anxiousMode_)
+          {
+            anxiousFound = true;
+            break;
+          }
+        }
+      }
+      if (anxiousFound) break;
+    }
+    if (anxiousFound) break;
+  }
+  env -> copy(&minTctEnv);
+}
+
+void Grasp::interInsert(Environment *env)
+{
+  const std::vector<Task> &tasks = (env->getTasks());
+  const std::vector<Machine> &machines = (env->getMachines());
+  bool anxiousFound = false;
+
+  Environment tempEnv, minTctEnv = *env;
+  int tempTctSum, minTctSum = env->getTctSum();
+
+  for (int l = 0; l < machines.size(); l++)
+  {
+    for (int i = 0; i < machines.size(); i++)
+    {
+      if (l != i)
+      {
+        for (int j = 0; j < machines[l].getSchedule().size(); j++)
+        {
+          for (int k = 0; k <= machines[i].getSchedule().size(); k++)
+          {
+            tempEnv = *env;
+            tempEnv.insertScheduledTasks(l, j, i, k);
+            tempEnv.computeTctSummatory();
+            tempTctSum = tempEnv.getTctSum();
+            if (tempTctSum < minTctSum)
+            {
+              minTctSum = tempTctSum;
+              minTctEnv = tempEnv;
+              if (anxiousMode_) 
+              {
+                anxiousFound = true;
+                break;
+              }
+            }
+          }
+          if (anxiousFound) break;
+        }
+        if (anxiousFound) break;
+      }
+    }
+    if (anxiousFound) break;
+  }
+  env->copy(&minTctEnv);
+}
+
+void Grasp::intraInsert(Environment *env)
+{
+  const std::vector<Task> &tasks = (env->getTasks());
+  const std::vector<Machine> &machines = (env->getMachines());
+  bool anxiousFound = false;
+
+  Environment tempEnv, minTctEnv = *env;
+  int tempTctSum, minTctSum = env->getTctSum();
+
+  for (int i = 0; i < machines.size(); i++)
+  {
+    for (int j = 0; j < machines[i].getSchedule().size(); j++)
+    {
+      for (int k = 0; k <= machines[i].getSchedule().size(); k++)
+      {
+        tempEnv = *env;
+        tempEnv.insertScheduledTasks(i, j, i, k);
+        tempEnv.computeTctSummatory();
+        tempTctSum = tempEnv.getTctSum();
+        if (tempTctSum < minTctSum)
+        {
+          minTctSum = tempTctSum;
+          minTctEnv = tempEnv;
+          if (anxiousMode_)
+          {
+            anxiousFound = true;
+            break;
+          }
+        }
+      }
+      if (anxiousFound) break;
+    }
+    if (anxiousFound) break;
+  }
+  env->copy(&minTctEnv);
 }

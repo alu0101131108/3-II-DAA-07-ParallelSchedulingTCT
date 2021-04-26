@@ -26,6 +26,11 @@ const int Environment::getTctSum() const
   return tctSum_;
 }
 
+ScheduleAlgorithm* Environment::getSchedulerAlgorithm() const
+{
+  return scheduler_;
+}
+
 void Environment::setTasks(std::vector<Task> newTaskList) 
 {
   tasks_ = newTaskList;
@@ -142,11 +147,19 @@ void Environment::loadProblemFromFile(std::string filename)
 
 void Environment::runScheduler() 
 {
-  for (int m = 0; m < machines_.size(); m++)
+  if (scheduler_ != NULL)
   {
-    machines_[m].clearSchedule();
+    for (int m = 0; m < machines_.size(); m++)
+    {
+      machines_[m].clearSchedule();
+    }
+    scheduler_->run(this);
   }
-  scheduler_ -> run(this);
+  else
+  {
+    std::cout << "ERROR: Scheduler Algorithm not attached to the environment.\n";
+    throw 75;
+  }
 }
 
 void Environment::printTasks() const 
@@ -175,4 +188,73 @@ void Environment::printMachineSchedules() const
     }
     std::cout << std::endl;
   }
+}
+
+void Environment::copy(Environment *env)
+{
+  setupTimes_ = env->getSetupTimes();
+  tasks_ = env->getTasks();
+  machines_ = env->getMachines();
+  tctSum_ = env->getTctSum();
+}
+
+void Environment::swapScheduledTasks(int mA, int tA, int mB, int tB)
+{
+  std::vector<Task> scheduleA = machines_[mA].getSchedule();
+  std::vector<Task> scheduleB = machines_[mB].getSchedule();
+  std::vector<Task>* pSchA = &scheduleA;
+  std::vector<Task>* pSchB = (mA == mB) ? &scheduleA : &scheduleB;
+
+  if (tA >= scheduleA.size() || tB >= scheduleB.size())
+  {
+    std::cout << "ERROR: Trying to access vector with out of range index.\n";
+    throw 20;
+  }
+
+  Task tempTask = (*pSchA)[tA];
+  (*pSchA)[tA] = (*pSchB)[tB];
+  (*pSchB)[tB] = tempTask;
+
+  machines_[mA].setSchedule(*pSchA);
+  machines_[mB].setSchedule(*pSchB);
+}
+
+void Environment::insertScheduledTasks(int mOrigin, int tOrigin, int mDestination, int tDestination)
+{
+  std::vector<Task> scheduleOrigin = machines_[mOrigin].getSchedule();
+  std::vector<Task> scheduleDest = machines_[mDestination].getSchedule();
+  std::vector<Task>* origin = &scheduleOrigin;
+  std::vector<Task>* destination = (mOrigin == mDestination) ? &scheduleOrigin : &scheduleDest;
+  Task insertable = scheduleOrigin[tOrigin];
+
+  origin -> erase(scheduleOrigin.begin() + tOrigin);
+  if (tDestination >= destination->size())
+  {
+    destination -> push_back(insertable);
+  }
+  else
+  {
+    destination -> insert(destination -> begin() + tDestination, insertable);
+  }
+
+  machines_[mOrigin].setSchedule(*origin);
+  machines_[mDestination].setSchedule(*destination);
+}
+
+void Environment::computeTctSummatory() 
+{
+  std::vector<Task> schedule;
+  int previousTaskInd, machineTct, tctSum = 0;
+  for (int m = 0; m < machines_.size(); m++)
+  {
+    schedule = machines_[m].getSchedule();
+    machineTct = 0;
+    for (int st = 0; st < schedule.size(); st++)
+    {
+      previousTaskInd = st == 0 ? 0 : schedule[st - 1].getId();
+      machineTct += (setupTimes_.get(previousTaskInd, schedule[st].getId()) + schedule[st].getProcessTime()) * (schedule.size() - st);
+    }
+    tctSum += machineTct;
+  }
+  tctSum_ = tctSum;
 }

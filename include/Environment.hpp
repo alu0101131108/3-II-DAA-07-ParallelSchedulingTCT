@@ -30,6 +30,7 @@ public:
   const std::vector<Machine>& getMachines() const;
   const Table& getSetupTimes() const;
   const int getTctSum() const;
+  ScheduleAlgorithm* getSchedulerAlgorithm() const;
   void setTasks(std::vector<Task> newTaskList);
   void setMachines(std::vector<Machine> newMachineList);
   void setSetupTimes(Table newSetupTimes);
@@ -40,6 +41,10 @@ public:
   void runScheduler();
   void printTasks() const;
   void printMachineSchedules() const;
+  void copy(Environment *env);
+  void swapScheduledTasks(int mA, int tA, int mB, int tB);
+  void insertScheduledTasks(int mOrigin, int tOrigin, int mDestination, int tDestination);
+  void computeTctSummatory();
 };
 
 #endif // __SCHEDULER_H__

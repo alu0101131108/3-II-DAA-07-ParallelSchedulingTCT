@@ -17,6 +17,7 @@ public:
   int getProcessTime() const;
   int getId() const;
   void print() const;
+  void operator=(const Task &newTask);
 };
 
 #endif // __TASK_H__
