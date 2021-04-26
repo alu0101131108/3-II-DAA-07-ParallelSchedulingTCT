@@ -10,13 +10,13 @@ class Gnvs : public ScheduleAlgorithm
   private:
     int iterations_;
     int iterationsType_;
-    int graspOperation_;
-    int candidatesNumber_;
+    int operationType_;
+    int kMax_;
     bool anxiousMode_;
     
   public:
-    Gnvs(int iterations, int iterationsType, int graspOperation,
-        int candidatesNumber = 4, int anxiousMode = false);
+    Gnvs(int iterations, int iterationsType, int operationType,
+        int kMax = 5, int anxiousMode = false);
     void run(Environment *env);
 };
 

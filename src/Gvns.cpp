@@ -1,8 +1,8 @@
 #include "./../include/ScheduleAlgorithms/Gvns.hpp"
 
-Gnvs::Gnvs(int iterations, int iterationsType, int graspOperation, int candidatesNumber, int anxiousMode) :
-iterations_(iterations), iterationsType_(iterationsType), graspOperation_(graspOperation),
-candidatesNumber_(candidatesNumber), anxiousMode_(anxiousMode)
+Gnvs::Gnvs(int iterations, int iterationsType, int operationType, int kMax, int anxiousMode) :
+iterations_(iterations), iterationsType_(iterationsType), operationType_(operationType),
+kMax_(kMax), anxiousMode_(anxiousMode)
 {}
 
 void Gnvs::run(Environment *env)
@@ -12,11 +12,11 @@ void Gnvs::run(Environment *env)
   Environment winnerEnv = *env;
   bool noProgress;
 
-  Grasp grasp(1, graspOperation_, iterationsType_, candidatesNumber_, anxiousMode_);
+  Grasp grasp(10, operationType_, iterationsType_, 4, anxiousMode_);
   int kIterator, lIterator;
-  int lMax = 4, kMax = 4;
+  int lMax = 4, kMax = kMax_;
 
-  Environment rvnsEnv, shakedEnv, vndEnv;
+  Environment initialEnv, shakedEnv, vndEnv;
   std::vector<Machine> machines;
   std::vector<Task> originSchedule, destSchedule;
   int machineNumber, originScheduleSize, destScheduleSize;
@@ -26,46 +26,49 @@ void Gnvs::run(Environment *env)
   {
     // Generate a solution, assuming there wont be progress.
     noProgress = true;
-    rvnsEnv = *env;
-    grasp.run(&rvnsEnv);
-    rvnsEnv.computeTctSummatory();
-    kIterator = 0;
+    initialEnv = *env;
+    grasp.run(&initialEnv);
+    initialEnv.computeTctSummatory();
+    kIterator = 1;
     do
     {
-      // Shake phase, 4 neighborhood structures generated with each operation are considered.
+      // Shake phase. Random neighbour will be generated. Its distance will depend on kMax attr.
       // Randomly find 2 different machine indexes and 2 different scheduled task indexes.
-      shakedEnv = rvnsEnv;
-      machines = shakedEnv.getMachines();
-      machineNumber = machines.size();
-      mOrigin = rand() % machineNumber;
-      mDest = (mOrigin + (rand() % machineNumber - 1) + 1) % machineNumber; 
-      originSchedule = machines[mOrigin].getSchedule();
-      destSchedule = machines[mDest].getSchedule();
-      originScheduleSize = originSchedule.size();
-      destScheduleSize = destSchedule.size();
-      tOrigin = rand() % originScheduleSize;
+      // Perform K times the operationType_ to shakeEnv in order to shake it.
 
-      switch (kIterator)
+      shakedEnv = initialEnv;
+      for (int k = 0; k < kIterator; k++)
       {
-        case INTER_INSERT:
-          tDest = rand() % destScheduleSize;
-          shakedEnv.insertScheduledTasks(mOrigin, tOrigin, mDest, tDest);
-          break;
-        case INTRA_INSERT:
-          tDest = (tOrigin + (rand() % originScheduleSize - 1) + 1) % originScheduleSize;
-          shakedEnv.insertScheduledTasks(mOrigin, tOrigin, mOrigin, tDest);
-          break;
-        case INTER_SWAP:
-          tDest = rand() % destScheduleSize;
-          shakedEnv.swapScheduledTasks(mOrigin, tOrigin, mDest, tDest);
-          break;
-        case INTRA_SWAP:
-          tDest = (tOrigin + (rand() % originScheduleSize - 1) + 1) % originScheduleSize;
-          shakedEnv.swapScheduledTasks(mOrigin, tOrigin, mOrigin, tDest);
-          break;
-        default:
-          std::cout << "ERROR: Unknown env operation in Gvns::run (K).\n";
-          throw 140;
+        machines = shakedEnv.getMachines();
+        machineNumber = machines.size();
+        mOrigin = rand() % machineNumber;
+        mDest = (mOrigin + (rand() % machineNumber - 1) + 1) % machineNumber; 
+        originSchedule = machines[mOrigin].getSchedule();
+        destSchedule = machines[mDest].getSchedule();
+        tOrigin = rand() % originSchedule.size();
+
+        switch (operationType_)
+        {
+          case INTER_INSERT:
+            tDest = rand() % destSchedule.size();
+            shakedEnv.insertScheduledTasks(mOrigin, tOrigin, mDest, tDest);
+            break;
+          case INTRA_INSERT:
+            tDest = (tOrigin + (rand() % originSchedule.size() - 1) + 1) % originSchedule.size();
+            shakedEnv.insertScheduledTasks(mOrigin, tOrigin, mOrigin, tDest);
+            break;
+          case INTER_SWAP:
+            tDest = rand() % destSchedule.size();
+            shakedEnv.swapScheduledTasks(mOrigin, tOrigin, mDest, tDest);
+            break;
+          case INTRA_SWAP:
+            tDest = (tOrigin + (rand() % originSchedule.size() - 1) + 1) % originSchedule.size();
+            shakedEnv.swapScheduledTasks(mOrigin, tOrigin, mOrigin, tDest);
+            break;
+          default:
+            std::cout << "ERROR: Unknown env operation in Gvns::run (Shake).\n";
+            throw 140;
+        }
       }
       shakedEnv.computeTctSummatory();
       
@@ -107,22 +110,22 @@ void Gnvs::run(Environment *env)
       } while (lIterator < lMax);
 
       // Move or not phase.
-      if (vndEnv.getTctSum() < rvnsEnv.getTctSum())
+      if (vndEnv.getTctSum() < initialEnv.getTctSum())
       {
-        rvnsEnv = vndEnv;
+        initialEnv = vndEnv;
         kIterator = 1;
       }
       else
       {
         kIterator++;
       }
-    } while (kIterator < kMax);
+    } while (kIterator <= kMax);
 
     // Keep trace of best solution found yet.
-    if (rvnsEnv.getTctSum() < minTctSum)
+    if (initialEnv.getTctSum() < minTctSum)
     {
-      minTctSum = rvnsEnv.getTctSum();
-      winnerEnv = rvnsEnv;
+      minTctSum = initialEnv.getTctSum();
+      winnerEnv = initialEnv;
       noProgress = false;
     }
     switch (iterationsType_)
