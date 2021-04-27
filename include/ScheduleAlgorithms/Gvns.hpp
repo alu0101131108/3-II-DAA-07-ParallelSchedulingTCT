@@ -16,7 +16,7 @@ class Gnvs : public ScheduleAlgorithm
     
   public:
     Gnvs(int iterations, int iterationsType, int operationType,
-        int kMax = 5, int anxiousMode = false);
+        int kMax = 5, bool anxiousMode = false);
     void run(Environment *env);
 };
 

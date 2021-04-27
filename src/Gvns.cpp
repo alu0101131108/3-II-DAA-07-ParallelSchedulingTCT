@@ -1,6 +1,6 @@
 #include "./../include/ScheduleAlgorithms/Gvns.hpp"
 
-Gnvs::Gnvs(int iterations, int iterationsType, int operationType, int kMax, int anxiousMode) :
+Gnvs::Gnvs(int iterations, int iterationsType, int operationType, int kMax, bool anxiousMode) :
 iterations_(iterations), iterationsType_(iterationsType), operationType_(operationType),
 kMax_(kMax), anxiousMode_(anxiousMode)
 {}
@@ -29,6 +29,17 @@ void Gnvs::run(Environment *env)
     initialEnv = *env;
     grasp.run(&initialEnv);
     initialEnv.computeTctSummatory();
+
+    // Set kMax to the min between Kmax_ and smaller schedule size from initialEnv.
+    machines = initialEnv.getMachines();
+    for (int m = 0; m < machines.size(); m++)
+    {
+      if (machines[m].getSchedule().size() < kMax_)
+      {
+        kMax = machines[m].getSchedule().size();
+      }
+    } 
+
     kIterator = 1;
     do
     {
