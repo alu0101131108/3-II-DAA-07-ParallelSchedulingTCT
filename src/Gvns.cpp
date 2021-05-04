@@ -7,6 +7,10 @@ kMax_(kMax), anxiousMode_(anxiousMode)
 
 void Gnvs::run(Environment *env)
 {
+  // Modification variables.
+  std::vector<int> order;
+
+  ////
   int iterationsCount = 0;
   int minTctSum = UPPER_TIME_LIMIT;
   Environment winnerEnv = *env;
@@ -83,42 +87,93 @@ void Gnvs::run(Environment *env)
       }
       shakedEnv.computeTctSummatory();
       
-      // VND phase.
-      lIterator = 0;
-      do 
+      // MODIFICATION CODE.
+      // Random order selection.
+      order.clear();
+      switch (rand() % 6)
       {
-        vndEnv = shakedEnv;
-        switch (lIterator)
-        {
-          case INTER_INSERT:
-            grasp.interInsert(&vndEnv);
-            break;
-          case INTRA_INSERT:
-            grasp.intraInsert(&vndEnv);
-            break;
-          case INTER_SWAP:
-            grasp.interSwap(&vndEnv);
-            break;
-          case INTRA_SWAP:
-            grasp.intraSwap(&vndEnv);
-            break;
-          default:
-            std::cout << "ERROR: Unknown env operation in Gvns::run (L).\n";
-            throw 140;
-        }
+      case 0:
+        order = {0, 1, 2};
+        break;
+      case 1:
+        order = {0, 2, 1};
+        break;
+      case 2:
+        order = {1, 2, 0};
+        break;
+      case 3:
+        order = {1, 0, 2};
+        break;
+      case 4:
+        order = {2, 1, 0};
+        break;
+      case 5:
+        order = {2, 0, 1};
+        break;
+      default:
+        order = {0, 1, 2};
+        break;
+      }
 
-        // VND Move or not phase.
-        vndEnv.computeTctSummatory();
-        if (vndEnv.getTctSum() < shakedEnv.getTctSum())
+      vndEnv = shakedEnv;
+      for (int i = 0; i < 3; i++)
+      {
+        switch (order[i])
         {
-          shakedEnv = vndEnv;
-          lIterator = 1;
+        case 0:
+          grasp.interInsert(&vndEnv);
+          break;
+        case 1:
+          grasp.intraInsert(&vndEnv);
+          break;
+        case 2:
+          grasp.interSwap(&vndEnv);
+          break;
+        default:
+          std::cout << "ERROR: Should never happen\n";
+          break;
         }
-        else
-        {
-          lIterator++;
-        }
-      } while (lIterator < lMax);
+      }
+
+      vndEnv.computeTctSummatory();
+      // END OF MODIFICATION.
+
+      // VND phase. DELETED
+      // lIterator = 0;
+      // do 
+      // {
+      //   vndEnv = shakedEnv;
+      //   switch (lIterator)
+      //   {
+      //     case INTER_INSERT:
+      //       grasp.interInsert(&vndEnv);
+      //       break;
+      //     case INTRA_INSERT:
+      //       grasp.intraInsert(&vndEnv);
+      //       break;
+      //     case INTER_SWAP:
+      //       grasp.interSwap(&vndEnv);
+      //       break;
+      //     case INTRA_SWAP:
+      //       grasp.intraSwap(&vndEnv);
+      //       break;
+      //     default:
+      //       std::cout << "ERROR: Unknown env operation in Gvns::run (L).\n";
+      //       throw 140;
+      //   }
+
+      //   // VND Move or not phase.
+      //   vndEnv.computeTctSummatory();
+      //   if (vndEnv.getTctSum() < shakedEnv.getTctSum())
+      //   {
+      //     shakedEnv = vndEnv;
+      //     lIterator = 1;
+      //   }
+      //   else
+      //   {
+      //     lIterator++;
+      //   }
+      // } while (lIterator < lMax);
 
       // Move or not phase.
       if (vndEnv.getTctSum() < initialEnv.getTctSum())
